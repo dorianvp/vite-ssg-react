@@ -31,7 +31,7 @@ export function FaviconAnchor({ text, className, children, ...restProps }: Favic
 
 	return <a
 		target="_blank"
-		className={`flex items-center ${className}`}
+		className={`flex items-center ${className ? className : ''}`}
 		href={children as string}
 		{...restProps}
 	>
@@ -39,6 +39,9 @@ export function FaviconAnchor({ text, className, children, ...restProps }: Favic
 		{url ? <img className="mr-2 h-4" src={`${url}`} /> :
 			<img className="mr-2 h-4" src={`${new URL(children as string).origin}/favicon.ico`} />
 		}
-		{text ? text : children}
+		<p className="text-ellipsis">
+
+			{text ? text : children}
+		</p>
 	</a>
 }

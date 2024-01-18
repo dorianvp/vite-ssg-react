@@ -10,18 +10,23 @@ type LayoutProps = PropsWithChildren & {
 }
 
 export function MainLayout({ children, routes }: LayoutProps) {
-	return <main className="w-full h-full flex">
+	return <main
+		className="w-full h-full grid justify-center grid-flow-col grid-cols-[0px_1fr_0px] md:grid-cols-[1fr_theme(maxWidth.2xl)_0fr] lg:grid-cols-[1fr_theme(maxWidth.2xl)_1fr]"
+	>
 		<NavMenu>
 			{routes.map(({ path, name }) => {
 				return (
 					<li className="" key={path}>
-						<Link className="w-full" to={path}>/{name.toLowerCase()}</Link>
+						<Link className="text-left block" to={path}>{name.toLowerCase()}</Link>
 					</li>
 				)
 			})}
 		</NavMenu>
-		<div className="flex flex-col items-start w-full h-screen p-4 lg:p-16 bg-orange-200">
+		<div className="h-full bg-white min-w-2xl w-2xl max-w-2xl px-12 py-5 place-self-center grid-cols-2">
 			{children}
 		</div>
+		<nav>
+
+		</nav>
 	</main>
 }
