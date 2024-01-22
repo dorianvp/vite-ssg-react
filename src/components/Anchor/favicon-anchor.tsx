@@ -16,6 +16,10 @@ export function FaviconAnchor({ text, className, children, ...restProps }: Favic
 			const htmlDoc = parser.parseFromString(data, 'text/html');
 			const head = htmlDoc.querySelector('head')
 			const element = head?.querySelector('[rel="icon"]')
+				|| head?.querySelector('[rel="shortcut icon"]')
+				|| head?.querySelector('[rel="icon shortcut"]')
+			console.log(element);
+
 			if (element) {
 				const href = element?.getAttribute('href')
 				if (href?.startsWith('http://') || href?.startsWith('https://')) {
