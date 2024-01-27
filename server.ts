@@ -6,8 +6,10 @@ import { fileURLToPath } from 'node:url'
 import express from 'express'
 import { ViteDevServer } from 'vite'
 import { mainRouter } from './src/server/index.ts'
+import { renderPage } from 'vike/server'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const root = `${__dirname}/..`
 
 const isTest = process.env.VITEST
 
@@ -58,16 +60,38 @@ export async function createServer(
 		try {
 			const url = req.originalUrl
 			if (url.includes('api')) return next()
-
-			let template, render
+			let template, render, page
 			if (!isProd) {
 				// always read fresh template in dev
 				template = fs.readFileSync(resolve('index.html'), 'utf-8')
 				template = await vite.transformIndexHtml(url, template)
-				render = (await vite.ssrLoadModule('/src/entry-server.tsx')).render
+				try {
+
+					if (url === '/') {
+						page = await import(
+							resolve(
+								'./src/pages/Home.tsx'
+							)
+						)
+					} else {
+						page = await import(
+							resolve(
+								'./src/pages/' + url.charAt(1).toUpperCase() + url.slice(2) + '.tsx'
+							)
+						)
+					}
+					console.log(page.metadata);
+				} catch (error) {
+
+					// TODO: transfer responsibility to router
+					return res.redirect(301, '/404')
+				}
+
+				// Append to html <head />
+				({ render } = await vite.ssrLoadModule('/src/entry-server.tsx'))
 			} else {
-				template = indexProd
-				render = (await import('./dist/server/entry-server.js')).render
+				template = indexProd;
+				({ render } = (await import('./dist/server/entry-server.js')))
 			}
 
 			const context = {} as { url: string }
@@ -78,7 +102,7 @@ export async function createServer(
 				return res.redirect(301, context.url)
 			}
 
-			const html = template.replace(`<!--app-html-->`, appHtml)
+			const html = template.replace(`<!--ssr-outlet-->`, appHtml);
 
 			res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
 		} catch (e) {

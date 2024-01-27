@@ -1,11 +1,11 @@
 import ReactDOMServer from 'react-dom/server'
-import { StaticRouter } from 'react-router-dom/server'
 import { App } from './App'
+import { StrictMode } from 'react'
 
 export function render(url: string, _context: {}) {
 	return ReactDOMServer.renderToString(
-		<StaticRouter location={url}>
-			<App />
-		</StaticRouter>,
+		<StrictMode>
+			<App location={url} />
+		</StrictMode>
 	)
 }

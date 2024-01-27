@@ -1,9 +1,7 @@
-import { PropsWithChildren } from "react";
+import { HTMLAttributes, PropsWithChildren } from "react";
 
-export function NavMenu({ children }: PropsWithChildren) {
-	return <nav className="w-full max-w-xl bg-gray col-span-1 row-span-1">
-		<ul className="h-full p-4 float-right">
-			{children}
-		</ul>
+export function NavMenu({ children, className }: PropsWithChildren & HTMLAttributes<HTMLDivElement>) {
+	return <nav className={`${className}`}>
+		{children}
 	</nav>
 }

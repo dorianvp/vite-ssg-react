@@ -12,8 +12,8 @@
 @font-face {
   font-family: "Merriweather";
   font-style: normal;
-  font-weight: 800;
-  src: url("/fonts/Merriweather/Merriweather-Bold.ttf") format("ttf"); 
+  font-weight: 400;
+  src: url("/fonts/Merriweather/Merriweather-Regular.ttf") format("ttf"); 
 }
 
 :root {
@@ -45,19 +45,22 @@ body {
 
 @layer base {
 	* {
-		@apply text-left
+		@apply text-left;
+		@apply font-sans;
 	}
   h1 {
-    @apply text-4xl;
+    @apply text-6xl;
 		@apply mb-4;
 		@apply font-serif;
 		@apply font-bold;
+		@apply font-black;
 		@apply text-black;
   }
 	p {
-		@apply font-sans;
+		@apply text-xl;
 	}
 	a {
-		@apply text-blue
+		@apply text-blue;
+		@apply text-xl;
 	}
 }
